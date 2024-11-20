@@ -16,8 +16,6 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
 async function fetchTransportData(ctx, params) {
   const { latitude, longitude } = params;
-  /*const latitude = 39.4699;
-  const longitude = -0.3763;*/
 
   const url = `https://api.jcdecaux.com/vls/v3/stations?apiKey=frifk0jbxfefqqniqez09tw4jvk37wyf823b5j1i&contract=valence`;
   try {
@@ -61,29 +59,24 @@ async function fetchTransportData(ctx, params) {
 
 async function fetchTransportDataStop(ctx, params) {
   const { stopId } = params;
-  const refreshToken = '{"refreshToken":"6b05b798-ca9c-42bb-b3bf-ee5671c35d86"}';
+  // Fetch POST https://api.cyclocity.fr/auth/environments/PRD/client_tokens, then get access token
+  let accessToken = await fetch('https://api.cyclocity.fr/auth/environments/PRD/client_tokens', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      "code": "vls.web.valence:PRD",
+      "key": "5baec26027069c8ff4358f7f8faf43e0ce2c1e32f6d919cc6006a4ee6bfdf5ac"
+    })
+  });
+
+  console.log('Access token response:', accessToken);
+  accessToken = await accessToken.json();
+  accessToken = accessToken.accessToken;
+  console.log('Access token:', accessToken);
 
   try {
-    // Step 1: Request an access token using the refresh token
-    const tokenResponse = await fetch('https://api.cyclocity.fr/auth/access_tokens', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: refreshToken
-    });
-
-    if (!tokenResponse.ok) {
-      throw new Error('Failed to fetch access token');
-    }
-
-    console.log('Token response:', tokenResponse);
-
-    const tokenData = await tokenResponse.json();
-    const accessToken = tokenData.accessToken;
-    console.log('Access token:', accessToken);
-
-    // Step 2: Use the access token to get bike information
     const bikeResponse = await fetch(`https://api.cyclocity.fr/contracts/valence/bikes?stationNumber=${stopId}`, {
       method: 'GET',
       headers: {
