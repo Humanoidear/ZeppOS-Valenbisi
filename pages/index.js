@@ -1,4 +1,4 @@
-import { createWidget, widget, align, text_style, redraw, deleteWidget } from "@zos/ui";
+import { createWidget, widget, align, text_style, redraw, deleteWidget, event, prop } from "@zos/ui";
 import { log as Logger, px } from "@zos/utils";
 import { Geolocation } from "@zos/sensor";
 import { push } from '@zos/router';
@@ -145,32 +145,16 @@ Page({
         Array.from({ length: data.length }).forEach((_, index) => {
           const stop = data.result[index];
 
-          viewContainer.createWidget(widget.BUTTON, {
+          const pill = viewContainer.createWidget(widget.FILL_RECT, {
             x: 0,
             y: px(index * (PILL_HEIGHT + 10) + MESSAGE_HEIGHT),
             w: DEVICE_WIDTH,
             h: px(PILL_HEIGHT),
-            normal_color: 0x181818,
-            press_color: 0x1a1a1a,
-            radius: px(30),
-            click_func: () => {
-              push({
-                url: '/pages/stop',
-                params: {
-                  stopId: stop.number,
-                  stopLatitude: stop.position.latitude,
-                  stopLongitude: stop.position.longitude,
-                  stopName: stop.address,
-                  stopUbica: stop.name,
-                  stopDistance: stop.distance,
-                  stopBikes: stop.mainStands.availabilities.bikes,
-                  stopStands: stop.mainStands.capacity,
-                }
-              });
-            }
+            color: 0x181818,
+            radius: px(30)
           });
 
-          viewContainer.createWidget(widget.TEXT, {
+          const distance = viewContainer.createWidget(widget.TEXT, {
             x: px(30),
             y: px(20) + px(index * (PILL_HEIGHT + 10) + MESSAGE_HEIGHT),
             w: DEVICE_WIDTH - px(60),
@@ -182,7 +166,7 @@ Page({
             text: stop.distance + "m"
           });
 
-          viewContainer.createWidget(widget.IMG, {
+          const bike = viewContainer.createWidget(widget.IMG, {
             x: px(30),
             y: px(20) + px(index * (PILL_HEIGHT + 10) + MESSAGE_HEIGHT),
             w: px(70),
@@ -190,7 +174,7 @@ Page({
             src: stop.mainStands.availabilities.bikes < 3 ? "/bikes_red.png" : "/bikes.png"
           });
 
-          viewContainer.createWidget(widget.TEXT, {
+          const bikenum = viewContainer.createWidget(widget.TEXT, {
             x: px(30 + 66),
             y: px(20) + px(index * (PILL_HEIGHT + 10) + MESSAGE_HEIGHT),
             w: DEVICE_WIDTH - px(60),
@@ -202,7 +186,7 @@ Page({
             text: `${stop.mainStands.availabilities.bikes}`,
           });
 
-          viewContainer.createWidget(widget.IMG, {
+         const parking = viewContainer.createWidget(widget.IMG, {
             x: px(30 + 2 * 66 - (stop.mainStands.availabilities.bikes < 10 ? 20 : 0)),
             y: px(20) + px(index * (PILL_HEIGHT + 10) + MESSAGE_HEIGHT),
             w: px(70),
@@ -210,7 +194,7 @@ Page({
             src: stop.mainStands.capacity < 3 ? "/stands_red.png" : "/stands.png"
           });
 
-          viewContainer.createWidget(widget.TEXT, {
+          const parkingnum = viewContainer.createWidget(widget.TEXT, {
             x: px(30 + 3 * 66 - (stop.mainStands.availabilities.bikes < 10 ? 20 : 0)),
             y: px(20) + px(index * (PILL_HEIGHT + 10) + MESSAGE_HEIGHT),
             w: DEVICE_WIDTH - px(60),
@@ -222,7 +206,7 @@ Page({
             text: `${stop.mainStands.capacity}`,
           });
 
-          viewContainer.createWidget(widget.TEXT, {
+          const name = viewContainer.createWidget(widget.TEXT, {
             x: px(30),
             y: px(70) + px(index * (PILL_HEIGHT + 10) + MESSAGE_HEIGHT),
             w: DEVICE_WIDTH - px(60),
@@ -234,7 +218,7 @@ Page({
             text: `${stop.number} | ${stop.address}`,
           });
 
-          viewContainer.createWidget(widget.TEXT, {
+          const address = viewContainer.createWidget(widget.TEXT, {
             x: px(30),
             y: px(120) + px(index * (PILL_HEIGHT + 10) + MESSAGE_HEIGHT),
             w: DEVICE_WIDTH - px(60),
@@ -247,6 +231,150 @@ Page({
             text: `${stop.name}`,
           });
 
+          pill.addEventListener(event.CLICK_UP, () => {
+            pill.setProperty(prop.DATASET, {
+              color: 0x1a1a1a,
+            })
+            push({
+              url: '/pages/stop',
+              params: {
+                stopId: stop.number,
+                stopLatitude: stop.position.latitude,
+                stopLongitude: stop.position.longitude,
+                stopName: stop.address,
+                stopUbica: stop.name,
+                stopDistance: stop.distance,
+                stopBikes: stop.mainStands.availabilities.bikes,
+                stopStands: stop.mainStands.capacity,
+              }
+            });
+          });
+          distance.addEventListener(event.CLICK_UP, () => {
+            pill.setProperty(prop.DATASET, {
+              color: 0x1a1a1a,
+            })
+            push({
+              url: '/pages/stop',
+              params: {
+                stopId: stop.number,
+                stopLatitude: stop.position.latitude,
+                stopLongitude: stop.position.longitude,
+                stopName: stop.address,
+                stopUbica: stop.name,
+                stopDistance: stop.distance,
+                stopBikes: stop.mainStands.availabilities.bikes,
+                stopStands: stop.mainStands.capacity,
+              }
+            });
+          });
+          bike.addEventListener(event.CLICK_UP, () => {
+            pill.setProperty(prop.DATASET, {
+              color: 0x1a1a1a,
+            })
+            push({
+              url: '/pages/stop',
+              params: {
+                stopId: stop.number,
+                stopLatitude: stop.position.latitude,
+                stopLongitude: stop.position.longitude,
+                stopName: stop.address,
+                stopUbica: stop.name,
+                stopDistance: stop.distance,
+                stopBikes: stop.mainStands.availabilities.bikes,
+                stopStands: stop.mainStands.capacity,
+              }
+            });
+          });
+          bikenum.addEventListener(event.CLICK_UP, () => {
+            pill.setProperty(prop.DATASET, {
+              color: 0x1a1a1a,
+            })
+            push({
+              url: '/pages/stop',
+              params: {
+                stopId: stop.number,
+                stopLatitude: stop.position.latitude,
+                stopLongitude: stop.position.longitude,
+                stopName: stop.address,
+                stopUbica: stop.name,
+                stopDistance: stop.distance,
+                stopBikes: stop.mainStands.availabilities.bikes,
+                stopStands: stop.mainStands.capacity,
+              }
+            });
+          });
+          parking.addEventListener(event.CLICK_UP, () => {
+            pill.setProperty(prop.DATASET, {
+              color: 0x1a1a1a,
+            })
+            push({
+              url: '/pages/stop',
+              params: {
+                stopId: stop.number,
+                stopLatitude: stop.position.latitude,
+                stopLongitude: stop.position.longitude,
+                stopName: stop.address,
+                stopUbica: stop.name,
+                stopDistance: stop.distance,
+                stopBikes: stop.mainStands.availabilities.bikes,
+                stopStands: stop.mainStands.capacity,
+              }
+            });
+          });
+          parkingnum.addEventListener(event.CLICK_UP, () => {
+            pill.setProperty(prop.DATASET, {
+              color: 0x1a1a1a,
+            })
+            push({
+              url: '/pages/stop',
+              params: {
+                stopId: stop.number,
+                stopLatitude: stop.position.latitude,
+                stopLongitude: stop.position.longitude,
+                stopName: stop.address,
+                stopUbica: stop.name,
+                stopDistance: stop.distance,
+                stopBikes: stop.mainStands.availabilities.bikes,
+                stopStands: stop.mainStands.capacity,
+              }
+            });
+          });
+          name.addEventListener(event.CLICK_UP, () => {
+            pill.setProperty(prop.DATASET, {
+              color: 0x1a1a1a,
+            })
+            push({
+              url: '/pages/stop',
+              params: {
+                stopId: stop.number,
+                stopLatitude: stop.position.latitude,
+                stopLongitude: stop.position.longitude,
+                stopName: stop.address,
+                stopUbica: stop.name,
+                stopDistance: stop.distance,
+                stopBikes: stop.mainStands.availabilities.bikes,
+                stopStands: stop.mainStands.capacity,
+              }
+            });
+          });
+          address.addEventListener(event.CLICK_UP, () => {
+            pill.setProperty(prop.DATASET, {
+              color: 0x1a1a1a,
+            })
+            push({
+              url: '/pages/stop',
+              params: {
+                stopId: stop.number,
+                stopLatitude: stop.position.latitude,
+                stopLongitude: stop.position.longitude,
+                stopName: stop.address,
+                stopUbica: stop.name,
+                stopDistance: stop.distance,
+                stopBikes: stop.mainStands.availabilities.bikes,
+                stopStands: stop.mainStands.capacity,
+              }
+            });
+          });
           totalIndex += 1;
         });
 
