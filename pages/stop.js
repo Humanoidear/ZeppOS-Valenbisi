@@ -139,7 +139,7 @@ Page({
   getStopData() {
     geolocation.start();
     const latitude = geolocation.getLatitude();
-    const longitude = geolocation.getLongitude() * -1;
+    const longitude = geolocation.getLongitude();
     const stopId = data.stopId;
 
     messageBuilder
